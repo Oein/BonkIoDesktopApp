@@ -1,12 +1,25 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow , Menu } = require('electron');
 const { readFileSync } = require("fs");
 
 let code = readFileSync(__dirname + "/fullscreen.js" , "utf-8");
 
+let menuTemplate = [
+    {
+        label: "bonkIoDesktop",
+        submenu: [
+            {
+                label: "About",
+                role: "about"
+            }
+        ]
+    }
+];
+
 const createWindow = () => {
     const win = new BrowserWindow({
       width: 800,
-      height: 600
+      height: 600,
+      title: "Bonk.io",
     });
   
     win.loadURL("https://bonk.io/");
@@ -21,6 +34,8 @@ const createWindow = () => {
         `)
     });
 };
+
+Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 
 app.whenReady().then(() => {
     createWindow();

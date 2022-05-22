@@ -1,14 +1,55 @@
 {
   "name": "bonkIoDesktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec \"electron .\""
+    "start": "nodemon --exec \"electron .\"",
+    "clean:all": "rm -rd dist && rm -rd build && mkdir dist && mkdir build",
+    "build:all": "rm -rd build; npm run build:win && npm run build:mac",
+    "build:win": "npm run build:win:x64 && npm run build:win:arm64",
+    "build:mac": "npm run build:mac:x64 && npm run build:mac:arm64",
+    "build:win:x64": "npx electron-builder --win --x64",
+    "build:win:arm64": "npx electron-builder --win --arm64",
+    "build:mac:x64": "npx electron-builder --mac --x64",
+    "build:mac:arm64": "npx electron-builder --mac --arm64",
+    "build:finish:st1": "cp build/bonkIoDesktop-*-arm64-win.zip dist/win_arm64.zip && rm build/bonkIoDesktop-*-arm64-win.zip",
+    "build:finish:st2": "cp build/bonkIoDesktop-*-win.zip dist/win_x64.zip && rm build/bonkIoDesktop-*-win.zip",
+    "build:finish:st3": "cp build/bonkIoDesktop-*-arm64.dmg dist/mac_arm64.dmg && rm build/bonkIoDesktop-*-arm64.dmg",
+    "build:finish:st4": "cp build/bonkIoDesktop-*.dmg dist/mac_x64.dmg && rm build/bonkIoDesktop-*.dmg",
+    "build:finish": "npm run build:finish:st1 && npm run build:finish:st2 && npm run build:finish:st3 && npm run build:finish:st4 && rm -rd build"
   },
   "devDependencies": {
     "electron": "^18.2.4",
-    "electron-packager": "^15.5.1",
     "nodemon": "^2.0.16"
+  },
+  "build": {
+    "productName": "bonkIoDesktop",
+    "appId": "com.oein.bonkiodesktop",
+    "asar": true,
+    "protocols": {
+      "name": "productTest",
+      "schemes": [
+        "productTest"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    },
+    "dmg": {
+      "title": "bonkIoDesktop"
+    },
+    "win": {
+      "target": [
+        "zip"
+      ]
+    },
+    "directories": {
+      "buildResources": "resources/installer/",
+      "output": "build/",
+      "app": "."
+    }
   }
 }
