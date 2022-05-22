@@ -41,8 +41,6 @@ const createWindow = () => {
       height: 600,
       title: "Bonk.io",
     });
-
-    win.webContents.openDevTools()
   
     win.loadURL("https://bonk.io/");
 
