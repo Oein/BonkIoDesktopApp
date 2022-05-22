@@ -1,0 +1,14 @@
+{
+  "name": "bonkIoDesktop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon --exec \"electron .\""
+  },
+  "devDependencies": {
+    "electron": "^18.2.4",
+    "electron-packager": "^15.5.1",
+    "nodemon": "^2.0.16"
+  }
+}
