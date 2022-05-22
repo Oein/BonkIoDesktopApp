@@ -16,7 +16,7 @@ ipcMain.on("openDiscord" , (ev , payload) => {
 })
 
 const createLinkJoinWindow = () => {
-    const win = new BrowserWindow({
+    let win = new BrowserWindow({
         width: 600,
         height: 150,
         title: "Bonk.io Join with Link",
@@ -32,10 +32,14 @@ const createLinkJoinWindow = () => {
     ipcMain.on("joinRoom" , (ev , payload) => {
         win.close();
     })
+
+    win.on("closed" , () => {
+        win = null;
+    })
 }
 
 const createWindow = () => {
-    const win = new BrowserWindow({
+    let win = new BrowserWindow({
         width: 800,
         height: 600,
         title: "Bonk.io",
@@ -120,7 +124,29 @@ const createWindow = () => {
     });
 
     ipcMain.on("joinRoom" , (ev , payload) => {
+        win.close();
+        win = null;
+        win = new BrowserWindow({
+            width: 800,
+            height: 600,
+            title: "Bonk.io",
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false,
+                enableRemoteModule: true,
+            }
+        });
         win.loadURL(payload["link"]);
+
+        win.webContents.on("did-finish-load", () => {
+            win.webContents.executeJavaScript(code)
+            win.webContents.executeJavaScript(`
+                let sc = document.createElement("script");
+                sc.innerHTML = "${code}";
+                document.body.appendChild(sc);
+                console.log(sc);
+            `)
+        });
     })
 };
 
