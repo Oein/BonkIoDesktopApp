@@ -1,47 +1,76 @@
-const { app, BrowserWindow , Menu } = require('electron');
-const { readFileSync } = require("fs");
+const {
+    app,
+    BrowserWindow,
+    Menu,
+    ipcMain
+} = require('electron');
+const {
+    readFileSync
+} = require("fs");
 const open = require('open')
 
-let code = readFileSync(__dirname + "/fullscreen.js" , "utf-8");
+let code = readFileSync(__dirname + "/fullscreen.js", "utf-8");
 
-let menuTemplate = [
-    {
-        label: "bonkIoDesktop",
-        submenu: [
-            {
-                label: "About",
-                role: "about"
-            },
-            {
-                label: "Developer | Oein"
-            }
-        ]
-    },
-    {
-        label: "Bonk.io 클랜 - Tiger Claw",
-        submenu : [
-            
-            {
-                label: "Discord 참가",
-                click: () => {
-                    open("https://discord.gg/ZHt6mWzBsw");
-                }
-            },
-
-            {
-                label: "클랜장 | ZOYUL"
-            },
-        ]
-    }
-];
+ipcMain.on("openDiscord" , (ev , payload) => {
+    open("https://discord.gg/ZHt6mWzBsw");
+})
 
 const createWindow = () => {
     const win = new BrowserWindow({
-      width: 800,
-      height: 600,
-      title: "Bonk.io",
+        width: 800,
+        height: 600,
+        title: "Bonk.io",
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            enableRemoteModule: true,
+        }
     });
-  
+
+    win.webContents.openDevTools();
+
+    let menuTemplate = [{
+            label: "bonkIoDesktop",
+            submenu: [{
+                    label: "About",
+                    role: "about"
+                },
+                {
+                    label: "Fullscreen",
+                    click: () => {
+                        if (win.isFullScreen()) {
+                            win.setFullScreen(false);
+                        } else {
+                            win.setFullScreen(true);
+                        }
+                    },
+                    accelerator: "F11"
+                },
+                {
+                    label: "Developer | Oein"
+                }
+            ]
+        },
+        {
+            label: "Bonk.io 클랜 - Tiger Claw",
+            submenu: [
+
+                {
+                    label: "Discord 참가",
+                    click: () => {
+                        open("https://discord.gg/ZHt6mWzBsw");
+                    }
+                },
+
+                {
+                    label: "클랜장 | ZOYUL"
+                },
+            ]
+        }
+    ];
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+
     win.loadURL("https://bonk.io/");
 
     win.webContents.on("did-finish-load", () => {
@@ -54,8 +83,6 @@ const createWindow = () => {
         `)
     });
 };
-
-Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 
 app.whenReady().then(() => {
     createWindow();
