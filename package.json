@@ -36,15 +36,18 @@
     "mac": {
       "target": [
         "dmg"
-      ]
+      ],
+      "icon": "./favi.ico"
     },
     "dmg": {
-      "title": "bonkIoDesktop"
+      "title": "bonkIoDesktop",
+      "icon": "./favi.ico"
     },
     "win": {
       "target": [
         "zip"
-      ]
+      ],
+      "icon": "./favi.ico"
     },
     "directories": {
       "buildResources": "resources/installer/",
