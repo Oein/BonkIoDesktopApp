@@ -57,3 +57,17 @@ a.style.right = "0px";
 a.style.bottom = "0px";
 a.style.cursor = "pointer";
 document.body.appendChild(a)
+
+document.head.innerHTML += `
+<style>
+body{
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+</style>
+`

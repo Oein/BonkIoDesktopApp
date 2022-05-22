@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join a room with bonk link</title>
+
+    <style>
+        #JoinLink {
+            width: 80%;
+            margin-left: 1%;
+            margin-right: 0%;
+            font-size: max(max(1.5vw,1.5vh),15px);
+            text-align: left;
+
+            border: none;
+            border-bottom: 1px solid #000;
+            outline: none;
+            padding: 5px;
+        }
+
+        #JoinLink:hover {
+            border-color: #07bc0c;
+        }
+
+        #JoinLink:focus {
+            border-color: #3498db;
+        }
+
+        #Join {
+            background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59));;
+            border: 0;
+            color: #000;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: .2s;
+        }
+
+        #Join:hover {
+            background-color: #3498db;
+            box-shadow: -5px 5px 10px grey;
+            color: #fff;
+            -webkit-transform: translateX(10px);
+            transform: translateX(10px);
+        }
+
+        #errMsg {
+            color: #e74c3c;
+            margin-left: 1%;
+            transition: .25s ease-in-out;
+            position: fixed;
+        }
+    </style>
+</head>
+<body>
+    <input placeholder="Put your join link here." id="JoinLink"></input>
+    <button onclick="joinRoom()" id="Join">Join</button>
+    <p></p>
+    <div id="errMsg" style="left: -100%;"></div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        const errMsg = document.getElementById('errMsg');
+        let msgId = -1;
+        function joinRoom(){
+            var link = document.getElementById("JoinLink").value;
+            if(!link.startsWith("https://bonk.io/")){
+                errMsg.innerHTML = "Not a valid bonk.io link.<p></p>ex : https://bonk.io/123456789";
+                errMsg.style.left = "1%";
+                msgId++;
+                setTimeout((id) => {
+                    if(msgId == id){
+                        errMsg.style.left = "-100%";
+                    }
+                } , 2000 , msgId);
+                return;
+            }
+
+            link = link.replace("https://bonk.io/", "");
+
+            if(link.length < 6){
+                errMsg.innerHTML = "I think that url is too short.<p></p>If it is right url, DM to oein#5694";
+                errMsg.style.left = "1%";
+                msgId++;
+                setTimeout((id) => {
+                    if(msgId == id){
+                        errMsg.style.left = "-100%";
+                    }
+                } , 2000 , msgId);
+                return;
+            }
+
+            if(link.length > 16){
+                errMsg.innerHTML = "I think that url is too long.<p></p>If it is right url, DM to oein#5694";
+                errMsg.style.left = "1%";
+                msgId++;
+                setTimeout((id) => {
+                    if(msgId == id){
+                        errMsg.style.left = "-100%";
+                    }
+                } , 2000 , msgId);
+                return;
+            }
+
+            ipcRenderer.send("joinRoom", {"link":document.getElementById("JoinLink").value});
+        }
+    </script>
+</body>
+</html>

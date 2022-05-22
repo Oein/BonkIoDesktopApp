@@ -15,6 +15,25 @@ ipcMain.on("openDiscord" , (ev , payload) => {
     open("https://discord.gg/ZHt6mWzBsw");
 })
 
+const createLinkJoinWindow = () => {
+    const win = new BrowserWindow({
+        width: 600,
+        height: 150,
+        title: "Bonk.io Join with Link",
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            enableRemoteModule: true,
+        }
+    });
+
+    win.loadFile("joinWithLink.html")
+
+    ipcMain.on("joinRoom" , (ev , payload) => {
+        win.close();
+    })
+}
+
 const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
@@ -27,9 +46,8 @@ const createWindow = () => {
         }
     });
 
-    win.webContents.openDevTools();
-
-    let menuTemplate = [{
+    let menuTemplate = [
+        {
             label: "bonkIoDesktop",
             submenu: [{
                     label: "About",
@@ -45,6 +63,12 @@ const createWindow = () => {
                         }
                     },
                     accelerator: "F11"
+                },
+                {
+                    label: "Join a room with a link",
+                    click: () => {
+                        createLinkJoinWindow();
+                    }
                 },
                 {
                     label: "Developer | Oein"
@@ -66,6 +90,18 @@ const createWindow = () => {
                     label: "클랜장 | ZOYUL"
                 },
             ]
+        },
+        {
+            label: "편집",
+            submenu: [
+                { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+                { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+                { type: "separator" },
+                { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+                { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+                { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+                { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+            ]
         }
     ];
 
@@ -82,6 +118,10 @@ const createWindow = () => {
             console.log(sc);
         `)
     });
+
+    ipcMain.on("joinRoom" , (ev , payload) => {
+        win.loadURL(payload["link"]);
+    })
 };
 
 app.whenReady().then(() => {
