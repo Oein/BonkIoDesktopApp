@@ -37,22 +37,25 @@
       "target": [
         "dmg"
       ],
-      "icon": "./favi.ico"
+      "icon": "./favicon.ico"
     },
     "dmg": {
       "title": "bonkIoDesktop",
-      "icon": "./favi.ico"
+      "icon": "./favicon.ico"
     },
     "win": {
       "target": [
         "zip"
       ],
-      "icon": "./favi.ico"
+      "icon": "./favicon.ico"
     },
     "directories": {
       "buildResources": "resources/installer/",
       "output": "build/",
       "app": "."
     }
+  },
+  "dependencies": {
+    "open": "^8.4.0"
   }
 }

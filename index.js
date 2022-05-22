@@ -1,5 +1,6 @@
 const { app, BrowserWindow , Menu } = require('electron');
 const { readFileSync } = require("fs");
+const open = require('open')
 
 let code = readFileSync(__dirname + "/fullscreen.js" , "utf-8");
 
@@ -10,7 +11,26 @@ let menuTemplate = [
             {
                 label: "About",
                 role: "about"
+            },
+            {
+                label: "Developer | Oein"
             }
+        ]
+    },
+    {
+        label: "Bonk.io 클랜 - Tiger Claw",
+        submenu : [
+            
+            {
+                label: "Discord 참가",
+                click: () => {
+                    open("https://discord.gg/ZHt6mWzBsw");
+                }
+            },
+
+            {
+                label: "클랜장 | ZOYUL"
+            },
         ]
     }
 ];
@@ -21,6 +41,8 @@ const createWindow = () => {
       height: 600,
       title: "Bonk.io",
     });
+
+    win.webContents.openDevTools()
   
     win.loadURL("https://bonk.io/");
 
